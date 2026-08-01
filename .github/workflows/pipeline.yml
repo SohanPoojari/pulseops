@@ -33,7 +33,7 @@ jobs:
       - name: Start Environment for Testing
         # This proves you can spin up a reproducible environment in CI
         run: |
-          docker-compose up -d
+          docker compose up -d
           echo "Waiting for services to initialize..."
           sleep 10 # Give Redis and the API a moment to start
 
@@ -44,4 +44,4 @@ jobs:
           
       - name: Cleanup
         if: always()
-        run: docker-compose down
+        run: docker compose down
