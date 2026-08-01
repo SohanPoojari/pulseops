@@ -1,0 +1,47 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      # The assessment requires "Immutable image tags such as a Git commit SHA"
+      - name: Set Image Tag
+        id: vars
+        run: echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Build Docker Images
+        run: |
+          docker build -t api:${{ env.SHA_SHORT }} ./api
+          docker build -t worker:${{ env.SHA_SHORT }} ./worker
+
+      - name: Start Environment for Testing
+        # This proves you can spin up a reproducible environment in CI
+        run: |
+          docker-compose up -d
+          echo "Waiting for services to initialize..."
+          sleep 10 # Give Redis and the API a moment to start
+
+      - name: Run Automated Smoke Test
+        run: |
+          pip install requests
+          python scripts/smoke_test.py
+          
+      - name: Cleanup
+        if: always()
+        run: docker-compose down

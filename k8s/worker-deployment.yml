@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pulseops-worker
+
+envFrom:
+        - configMapRef:
+            name: pulseops-config
+spec:
+  replicas: 3 # We can scale workers independently from the API
+  selector:
+    matchLabels:
+      app: pulseops-worker
+  template:
+    metadata:
+      labels:
+        app: pulseops-worker
+    spec:
+      # Graceful shutdown: Wait 30 seconds for current jobs to finish before killing the container[cite: 1]
+      terminationGracePeriodSeconds: 30 
+      containers:
+      - name: worker
+        image: worker:latest
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: pulseops-secrets
+              key: redis-url
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000

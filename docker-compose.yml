@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  api:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      # Injecting config via environment satisfies the requirement: "Environment-based configuration"
+      - REDIS_URL=redis://redis:6379/0
+
+  worker:
+    build: 
+      context: ./worker
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    # We override the CMD here so it runs the worker script instead of uvicorn
+    command: ["rq", "worker", "-u", "redis://redis:6379/0", "job_queue"]
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"

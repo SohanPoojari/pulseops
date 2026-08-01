@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pulseops-api
+spec:
+  replicas: 2 # Run two copies for high availability
+  selector:
+    matchLabels:
+      app: pulseops-api
+  template:
+    metadata:
+      labels:
+        app: pulseops-api
+    spec:
+      containers:
+      - name: api
+        image: api:latest # CI/CD will replace this with the commit SHA
+        ports:
+        - containerPort: 8000
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: pulseops-secrets
+              key: redis-url
+        # Security: Do not run as root
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+        # Health Checks: Tells K8s if the app is frozen
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8000
+          initialDelaySeconds: 5

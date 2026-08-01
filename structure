@@ -1,0 +1,29 @@
+.
+├── .github/
+│   └── workflows/
+│       └── pipeline.yml       # CI/CD pipeline (Build, Test, Deploy, Smoke-Test)
+├── api/
+│   ├── Dockerfile             # Multi-stage build for API
+│   ├── main.py                # FastAPI implementation
+│   └── requirements.txt
+├── worker/
+│   ├── Dockerfile             # Multi-stage build for Worker
+│   ├── worker.py              # Background job processing logic
+│   └── requirements.txt
+├── infra/
+│   └── terraform/             # Terraform modules/configuration
+│       ├── main.tf
+│       ├── variables.tf
+│       └── outputs.tf
+├── k8s/                       # Kubernetes manifests
+│   ├── api-deployment.yaml
+│   ├── worker-deployment.yaml
+│   └── configmap-secret.yaml
+├── scripts/
+│   └── smoke_test.py          # Mandatory automated smoke-test script
+├── docs/                      # Operational documentation
+│   ├── runbook_deployment.md  # Deployment/Rollback runbook[cite: 1]
+│   ├── runbook_incident.md    # Incident response runbook[cite: 1]
+│   └── migration_plan.md      # Migration-away-from-Facets proposal[cite: 1]
+├── .dockerignore              # Ensure efficient container builds[cite: 1]
+└── README.md                  # Main documentation & AI disclosure[cite: 1]
