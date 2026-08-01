@@ -45,3 +45,10 @@ jobs:
       - name: Cleanup
         if: always()
         run: docker compose down
+
+      - name: Validate Terraform
+        working-directory: ./infra/terraform
+        run: |
+          terraform init -backend=false
+          terraform fmt -check
+          terraform validate
