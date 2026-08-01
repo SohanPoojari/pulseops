@@ -46,6 +46,11 @@ jobs:
         if: always()
         run: docker compose down
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.0" # or your preferred version
+
       - name: Validate Terraform
         working-directory: ./infra/terraform
         run: |
