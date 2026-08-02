@@ -29,3 +29,23 @@ To run it locally, type `python scripts/smoke_test.py`.
 ## Cost & Cleanup
 * The estimated monthly cost for AWS is about $40 (for the t3.micro RDS, t3.micro ElastiCache, and basic VPC networking).
 * **Cleanup:** Execute `terraform destroy -auto-approve` and `docker-compose down -v` in order to get rid of all the resources.
+
+## Demonstration Evidence
+
+To demonstrate the system functionality and reliability, I have included the following evidence:
+
+### 1. Automated CI/CD Pipeline
+The following image shows a successful run of the GitHub Actions pipeline, confirming that build, validation, and testing are fully automated.
+![Pipeline Success](screenshots/pipeline-overall.png)
+
+### 2. Failure Catch & Rollback Demonstration
+The pipeline is designed to catch regressions. The first image shows the pipeline failing after an intentional code break; the second shows the pipeline passing after the rollback/fix.
+* **Failure Catch:** ![Pipeline Failure](screenshots/pipeline_failure.png)
+* **Rollback Success:** ![Pipeline Success](screenshots/pipeline_success.png)
+
+### 3. Automated Smoke Test Output
+This shows the final output of the `smoke_test.py` script running locally, confirming end-to-end integration:
+```bash
+      Job processed correctly! Result: HELLO PLATFORM
+```
+* **Smoke Test Success:** ![Smoke Test](screenshots/smoke-test.png)
