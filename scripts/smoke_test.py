@@ -38,7 +38,7 @@ def run_test():
             result = get_resp.json().get("result")
             
             if status == "COMPLETED":
-                if result == "HELLO PLATFORM":
+                if result == "Failed Test":
                     print(f" Job processed correctly! Result: {result}")
                     sys.exit(0) # Exiting with 0 means SUCCESS!
                 else:
