@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: pulseops-api
 spec:
-  replicas: 2 # Run two copies for high availability
+  replicas: 2 # it Runs two copies for high availability
   selector:
     matchLabels:
       app: pulseops-api
@@ -23,7 +23,7 @@ spec:
             secretKeyRef:
               name: pulseops-secrets
               key: redis-url
-        # Security: Do not run as root
+        # Security: it tells K8s not to run as root
         securityContext:
           runAsNonRoot: true
           runAsUser: 1000

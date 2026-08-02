@@ -21,7 +21,7 @@ services:
       - redis
     environment:
       - REDIS_URL=redis://redis:6379/0
-    # We override the CMD here so it runs the worker script instead of uvicorn
+    # I override the CMD here so it runs the worker script instead of uvicorn
     command: ["rq", "worker", "-u", "redis://redis:6379/0", "job_queue"]
 
   redis:

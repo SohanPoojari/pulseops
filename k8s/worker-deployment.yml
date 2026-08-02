@@ -16,7 +16,7 @@ spec:
       labels:
         app: pulseops-worker
     spec:
-      # Graceful shutdown: Wait 30 seconds for current jobs to finish before killing the container[cite: 1]
+      # Graceful shutdown: it Waits 30 seconds for current jobs to finish before killing the container[cite: 1]
       terminationGracePeriodSeconds: 30 
       containers:
       - name: worker
